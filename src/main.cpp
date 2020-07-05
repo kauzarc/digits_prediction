@@ -1,7 +1,9 @@
-#include <iostream>
+#include "header/window.hpp"
 
 int main()
 {
-    std::cout << "Hello world !" << std::endl;
+    Window app;
+    if (app.Construct(560, 560, 1, 1))
+        app.Start();
     return 0;
 }
