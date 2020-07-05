@@ -8,6 +8,7 @@ class Window : public olc::PixelGameEngine
 {
 private:
     std::vector<bool> pixel_array;
+    std::vector<double> X;
 
 public:
     Window();
@@ -20,4 +21,5 @@ public:
 private:
     void draw_pencil(int radius);
     int get_pixel_array_coord(const olc::vi2d &coord);
+    void fill_X();
 };
