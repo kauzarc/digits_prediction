@@ -13,8 +13,16 @@ bool Window::OnUserCreate()
 
 bool Window::OnUserUpdate(float fElapsedTime)
 {
-    for (int x = 0; x < ScreenWidth(); x++)
-        for (int y = 0; y < ScreenHeight(); y++)
-            Draw(x, y, olc::Pixel(rand() % 256, rand() % 256, rand() % 256));
+    const int radius = 100;
+
+    if (GetMouse(0).bHeld)
+    {
+        olc::vi2d mouse_pos = {GetMouseX(), GetMouseY()};
+        for (int x = mouse_pos.x - radius; x < mouse_pos.x + radius; x++)
+            for (int y = mouse_pos.y - radius; y < mouse_pos.y + radius; y++)
+                if ((x - mouse_pos.x) * (x - mouse_pos.x) + (y - mouse_pos.y) * (y - mouse_pos.y) < radius)
+                    Draw({x, y});
+    }
+
     return true;
 }
