@@ -11,6 +11,7 @@ bool Window::OnUserCreate()
     pixel_array.assign(MODEL_HEIGHT * PIXEL_ARRAY_SCALE * MODEL_WIDTH * PIXEL_ARRAY_SCALE, false);
     X.assign(MODEL_WIDTH * MODEL_HEIGHT + 1, 0.);
     X[0] = 1.;
+    perceptron.load("perceptron.bin");
 
     return true;
 }
@@ -29,10 +30,21 @@ bool Window::OnUserUpdate(float fElapsedTime)
 
     fill_X();
 
+    FillRect({0, 0},
+             {80, 80},
+             olc::BLACK);
+
+    prediction = perceptron.predict(X);
+    int max_index = std::max_element(prediction.begin(), prediction.end()) - prediction.begin();
+    DrawString({0, 0},
+               std::to_string(max_index),
+               olc::WHITE,
+               8);
+
     // for (int x = 0; x < ScreenWidth(); x++)
     //     for (int y = 0; y < ScreenWidth(); y++)
     //     {
-    //         float c = X[x / SCREEN_SCALE + y / SCREEN_SCALE * MODEL_WIDTH + 1];
+    //         float c = X[x / SCREEN_SCALE * MODEL_HEIGHT + y / SCREEN_SCALE + 1];
     //         Draw({x, y},
     //              olc::PixelF(c, c, c));
     //     }
@@ -68,6 +80,6 @@ void Window::fill_X()
                     if (pixel_array[(x * PIXEL_ARRAY_SCALE + i) + (y * PIXEL_ARRAY_SCALE + j) * MODEL_WIDTH * PIXEL_ARRAY_SCALE])
                         count++;
 
-            X[x + y * MODEL_WIDTH + 1] = (double)count / (double)(PIXEL_ARRAY_SCALE * PIXEL_ARRAY_SCALE);
+            X[x * MODEL_HEIGHT + y + 1] = (double)count / (double)(PIXEL_ARRAY_SCALE * PIXEL_ARRAY_SCALE);
         }
 }
