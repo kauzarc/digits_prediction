@@ -1,6 +1,8 @@
 #define OLC_PGE_APPLICATION
 #include "../header/window.hpp"
 
+#include <iomanip>
+
 Window::Window()
 {
     sAppName = "Window";
@@ -30,16 +32,30 @@ bool Window::OnUserUpdate(float fElapsedTime)
 
     fill_X();
 
+    const int scale = 2;
+
     FillRect({0, 0},
-             {80, 80},
+             {scale * 7 * 8, scale * 10 * 8},
              olc::BLACK);
 
     prediction = perceptron.predict(X);
     int max_index = std::max_element(prediction.begin(), prediction.end()) - prediction.begin();
+
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(3);
+    for (unsigned int i = 0; i < prediction.size(); i++)
+    {
+        stream << i << ":" << prediction[i] << "\n";
+    }
+
     DrawString({0, 0},
-               std::to_string(max_index),
+               stream.str(),
                olc::WHITE,
-               8);
+               scale);
+
+    DrawRect({0, scale * max_index * 8},
+             {scale * 7 * 8, scale * 8},
+             olc::WHITE);
 
     // for (int x = 0; x < ScreenWidth(); x++)
     //     for (int y = 0; y < ScreenWidth(); y++)
